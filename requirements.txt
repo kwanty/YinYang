@@ -1,0 +1,3 @@
+numpy>=1.21.0
+matplotlib>=3.5.0jupyter>=1.0.0
+tensorflow>=2.10.0

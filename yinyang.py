@@ -203,10 +203,9 @@ def visualize_4x4() -> None:
 
 def generate_dataset(
     num_samples: int = 10000,
-    filename: str = "data/yinyang_10k.npz",
-) -> None:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Generate a dataset of Yin Yang images and save to NPZ format.
+    Generate a dataset of Yin Yang images and labels.
 
     Creates a batch of grayscale images with random parameter values uniformly
     distributed in [0, 1], along with corresponding parameter labels. The dataset
@@ -214,11 +213,11 @@ def generate_dataset(
 
     Args:
         num_samples: Number of images to generate (default: 10000).
-        filename: Path to save the compressed NPZ file (default: 'yinyang.npz').
 
-    Output file structure:
+    Returns:
+        Tuple of (x_train, y_train):
         x_train: Array of shape (num_samples, 28, 28) with dtype float32
-        y_train: Array of shape (num_samples,) with dtype float32
+        y_train: Array of shape (num_samples,) with dtype float32 containing p values
     """
     print(f"Generating {num_samples} samples...")
 
@@ -238,10 +237,8 @@ def generate_dataset(
     images = np.array(images, dtype=np.float32)
     labels = p_values.astype(np.float32)
 
-    # Save to compressed NPZ format
-    np.savez_compressed(filename, x_train=images, y_train=labels)
-    print(f"Saved dataset to {filename}")
-    print(f"Shapes: x_train {images.shape}, y_train {labels.shape}")
+    print(f"Generated dataset with shapes: x_train {images.shape}, y_train {labels.shape}")
+    return images, labels
 
 
 if __name__ == "__main__":
@@ -249,5 +246,7 @@ if __name__ == "__main__":
     visualize_16x16()
     visualize_4x4()
 
-    # Generate dataset for training
-    generate_dataset()
+    # Generate and save dataset for training
+    x_train, y_train = generate_dataset(10000)
+    np.savez_compressed('data/yinyang_10k.npz', x_train=x_train, y_train=y_train)
+    print("Saved dataset to data/yinyang_10k.npz")
